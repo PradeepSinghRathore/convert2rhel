@@ -1,0 +1,42 @@
+---
+- name: convert centos to rhel 
+  hosts: Linux_CentOStest 
+  tasks:
+    - name: add dns entry 
+      lineinfile:
+        path: /etc/resolv.conf
+        line: nameserver 8.8.8.8
+
+    - name: update the centos with latest version
+      yum:
+        name: '*'
+        state: latest
+
+    - name: yum clean all
+      command: yum clean all
+
+
+    - name: download gpg key
+      command: "curl -o /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release https://www.redhat.com/security/data/fd431d51.txt"
+
+    - name: create and download repo 
+      command: "curl --create-dirs -o /etc/rhsm/ca/redhat-uep.pem https://ftp.redhat.com/redhat/convert2rhel/redhat-uep.pem"  
+
+    - name: create repo 
+      command:  "curl -o /etc/yum.repos.d/convert2rhel.repo https://ftp.redhat.com/redhat/convert2rhel/7/convert2rhel.repo"
+ 
+    - name: yum update 
+      yum: 
+        name: '*'
+        state: latest
+
+    - name: yum repolis to check convert2rhel 
+      command: "yum repolist all"
+
+    - name: install convert2rhel
+      yum:
+        name: convert2rhel
+        state: present
+
+
+
