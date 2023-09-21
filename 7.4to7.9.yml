@@ -1,0 +1,47 @@
+---
+- name: Configure the company Yum repositories
+  hosts: Linux_CentOStest 
+  connection: ssh 
+  tasks:
+    - name: Show the centos updatated version
+      command: cat /etc/redhat-release
+
+    - name: move centos repo 
+      command: "mv /etc/yum.repos.d/{{ item }} /root/"
+      with_items: 
+        - CentOS-Base.repo
+        - CentOS-CR.repo
+        - CentOS-Debuginfo.repo
+        - CentOS-fasttrack.repo
+        - CentOS-Media.repo
+        - CentOS-Sources.repo
+        - CentOS-Vault.repo
+
+    - name: Create a local repo 
+      yum_repository:
+        file: local
+        name: localrepo
+        description: localrepo
+        baseurl: http://192.168.100.112/CentOSrepo/
+        enabled: yes
+        gpgcheck: no 
+        state: present 
+    - name: clear yum cache 
+      command: yum clean all 
+
+    - name: repolist check enabled 
+      command: yum repolist all
+
+    - name: update centos from 7.4 to 7.9 
+      yum:
+       name: "*"
+       state: latest
+
+    - name: clear yum cache
+      command: yum clean all
+
+    - name: Show the centos updatated version 
+      command: cat /etc/redhat-release
+
+    - name: move local repo 
+      command: mv /etc/yum.repos.d/local.repo /root/

@@ -1,0 +1,8 @@
+---
+- name: check version
+  hosts: Linux_CentOStest
+  tasks:
+    - name: check update os version
+      command: cat /etc/redhat-release
+
+

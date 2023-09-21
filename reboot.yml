@@ -1,0 +1,17 @@
+---
+- name: reboot the system
+  hosts: Linux_CentOStest
+  tasks:
+    - name: reboot the server 
+      reboot:
+        reboot_timeout: 1000
+
+    - name: check updated kernal version
+      shell: rpm -q kernal --queryformat '%{installtime} %{version}-%{release}.%{arch}\n' | sort -n k1 | tail -1 | cut -d ' ' -f 2
+      #register: kernal_installed_latest
+    - name: check running kernal version
+      shell: uname -r
+      #register: kernal_version
+      #    - fail:
+      #  msg: "latest kernal version {{kernal_installed_latest.studout}} doesnt match running kernal {{kernal_version.studout}}"
+      #when: (kernal_installed_latest.standout != kernal_version.studout)

@@ -1,0 +1,29 @@
+---
+- name: Rhel 7.9 to 8.6
+  hosts: Linux_CentOStest
+  tasks:
+    - name:  unregister redhat_subscription from previous version
+      redhat_subscription:
+            username: Pournima.Makasare
+            password: Welcome@2019
+            state: absent
+
+    - name:  register redhat_subscription 
+      redhat_subscription:
+            username: Pournima.Makasare
+            password: Welcome@2019
+            state: present
+            auto_attach: true
+
+
+    - name: enabled the repos
+      command: subscription-manager repos --enable rhel-7-server-rpms --enable rhel-7-server-extras-rpms 
+
+    - name: yum clean all
+      command: yum clean all
+
+    - name: install leapp
+      command: yum install leapp -y
+
+    - name: create preupgrde configuration
+      command: leapp preupgrade --target 8.6

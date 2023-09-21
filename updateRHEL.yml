@@ -1,0 +1,22 @@
+---
+- name: update with the latest version 
+  hosts: CentOStest
+  tasks:
+    - name:  unregister redhat_subscription from previous version
+      redhat_subscription:
+            username: Pournima.Makasare
+            password: Welcome@2019
+            state: absent
+
+    - name:  register redhat_subscription
+      redhat_subscription:
+            username: Pournima.Makasare
+            password: Welcome@2019
+            state: present
+            auto_attach: true
+
+    - name: update with the latest version
+      yum:
+        name: '*'
+        state: latest
+     

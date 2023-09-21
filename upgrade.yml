@@ -1,0 +1,13 @@
+---
+- name: start upgrading
+  hosts: Linux_CentOStest
+  tasks:
+    - name: start upgrading
+      command: leapp upgrade --target 8.6 
+      
+    - name: reboot the system
+      reboot:
+        reboot_timeout: 1000
+
+    - name: check version of os
+      command: ct /etc/redhat-release
